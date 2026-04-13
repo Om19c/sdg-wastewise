@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: wastewise-sdg-project
+    env: static
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
