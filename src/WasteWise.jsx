@@ -11,14 +11,13 @@ const STYLES = `
   
   --primary: #10B981; 
   --primary-hover: #059669;
+  --primary-shadow: #047857;
+  
   --secondary: #FDE68A; 
-  --secondary-text: #D97706;
+  --secondary-shadow: #D97706;
   
   --danger-light: #FEE2E2;
   --danger-text: #DC2626;
-  
-  --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
-  --shadow-hover: 0 12px 24px rgba(16, 185, 129, 0.15);
   
   --radius: 24px;
 }
@@ -33,143 +32,354 @@ body {
 
 * { box-sizing: border-box; }
 
-.app-container {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 20px;
-  min-height: 100vh;
+/* THE APP SHELL */
+.app-shell {
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
 }
 
-.header { text-align: center; padding: 20px 0 10px; }
-.logo { font-size: 48px; margin-bottom: 10px; display: inline-block; animation: bounce 2s infinite ease-in-out; }
-@keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+.app-sidebar {
+  background: var(--card-bg);
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-bottom: 4px solid #E2E8F0;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+}
+
+.app-main {
+  flex: 1;
+  padding: 24px 20px 80px;
+  width: 100%;
+}
+
+.page-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+@media (min-width: 1024px) {
+  .app-shell { flex-direction: row; height: 100vh; overflow: hidden; }
+  .app-sidebar {
+    width: 320px;
+    height: 100%;
+    border-bottom: none;
+    border-right: 4px solid #E2E8F0;
+    align-items: stretch;
+    padding: 40px 24px;
+    overflow-y: auto;
+  }
+  .app-main {
+    height: 100%;
+    overflow-y: auto;
+    padding: 60px 48px;
+    background: #E6F6ED;
+  }
+  .page-container {
+    max-width: 1400px;
+  }
+}
+
+/* BRANDING */
+.header-brand {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.logo {
+  font-size: 56px;
+  margin-bottom: 8px;
+  display: inline-block;
+  animation: bounce 2s infinite ease-in-out;
+  line-height: 1;
+}
+
+@keyframes bounce { 
+  0%, 100% { transform: translateY(0); } 
+  50% { transform: translateY(-8px); } 
+}
+
 .title { font-size: 32px; font-weight: 900; margin: 0 0 8px 0; color: var(--text-dark); letter-spacing: -0.02em; }
-.subtitle { font-size: 16px; color: var(--text-gray); margin: 0; font-weight: 600; }
+.subtitle { font-size: 15px; color: var(--text-gray); margin: 0; font-weight: 700; line-height: 1.4; }
 
 /* GLOBAL MESS PICKER */
 .context-picker-wrapper {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  margin: 20px 0 30px;
-  animation: fadeIn 0.4s ease-out forwards;
+  margin-bottom: 24px;
+  width: 100%;
 }
 
 .context-picker-lbl {
-  font-size: 14px;
-  font-weight: 800;
+  font-size: 13px;
+  font-weight: 900;
   color: var(--text-gray);
   margin-bottom: 8px;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.1em;
+  text-align: center;
 }
 
 .context-picker {
-  padding: 14px 44px 14px 24px;
-  font-size: 18px;
+  width: 100%;
+  padding: 16px 44px 16px 20px;
+  font-size: 16px;
   font-weight: 800;
-  border-radius: 100px;
-  border: 4px solid var(--primary);
-  background: white url('data:image/svg+xml;utf8,<svg width="16" height="10" viewBox="0 0 16 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 2.5L8 7.5L13.5 2.5" stroke="%2310B981" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>') no-repeat right 20px center;
+  border-radius: 20px;
+  border: 4px solid #E2E8F0;
+  background: #F8FAFC url('data:image/svg+xml;utf8,<svg width="16" height="10" viewBox="0 0 16 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 2.5L8 7.5L13.5 2.5" stroke="%2310B981" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>') no-repeat right 20px center;
   color: var(--text-dark);
   cursor: pointer;
   outline: none;
   appearance: none;
-  box-shadow: 0 8px 20px rgba(16, 185, 129, 0.15);
   transition: all 0.2s;
   font-family: inherit;
-  max-width: 100%;
+  box-shadow: 0 4px 0 #E2E8F0;
 }
 
 .context-picker:hover {
+  border-color: var(--primary);
+  box-shadow: 0 4px 0 var(--primary);
   transform: translateY(-2px);
-  box-shadow: 0 12px 25px rgba(16, 185, 129, 0.25);
 }
 
-.nav-container { display: flex; overflow-x: auto; gap: 12px; padding: 10px 5px 20px; justify-content: flex-start; scrollbar-width: none; }
-@media (min-width: 768px) { .nav-container { justify-content: center; flex-wrap: wrap; } }
-.nav-container::-webkit-scrollbar { display: none; }
+.context-picker:focus {
+  border-color: var(--primary);
+  box-shadow: 0 4px 0 var(--primary-shadow);
+}
 
-.tab-btn { background: var(--card-bg); border: 2px solid transparent; padding: 12px 24px; border-radius: 100px; font-size: 16px; font-weight: 700; color: var(--text-gray); cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: var(--shadow-sm); transition: all 0.3s; white-space: nowrap; }
-.tab-btn:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); border-color: #D1FAE5; }
-.tab-btn.active { background: var(--primary); color: white; box-shadow: 0 8px 16px rgba(16, 185, 129, 0.3); }
-.tab-icon { font-size: 20px; }
 
-.card { background: var(--card-bg); border-radius: var(--radius); padding: 30px; box-shadow: var(--shadow-sm); margin-bottom: 24px; transition: transform 0.3s; border: 3px solid transparent; }
-.card:hover { border-color: #D1FAE5; transform: translateY(-2px); }
-.card-title { font-size: 22px; font-weight: 800; margin: 0 0 20px 0; display: flex; align-items: center; gap: 12px; }
-.card-icon { font-size: 28px; background: var(--secondary); width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; border-radius: 16px; }
+/* CHUNKY NAVIGATION TABS */
+.nav-tabs {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  overflow-x: auto;
+  padding-bottom: 12px;
+  scrollbar-width: none;
+}
+
+.nav-tabs::-webkit-scrollbar { display: none; }
+
+@media (min-width: 1024px) {
+  .nav-tabs {
+    flex-direction: column;
+    overflow-x: visible;
+    gap: 16px;
+    padding-bottom: 0;
+    flex: 1;
+  }
+}
+
+.tab-btn {
+  background: white;
+  border: 4px solid #E2E8F0;
+  padding: 16px 24px;
+  border-radius: 20px;
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text-gray);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.1s, border-color 0.2s, background 0.2s;
+  white-space: nowrap;
+  box-shadow: 0 6px 0 #E2E8F0;
+}
+
+@media (min-width: 1024px) { .tab-btn { width: 100%; font-size: 18px; } }
+
+.tab-btn:hover {
+  transform: translateY(-2px);
+  border-color: var(--primary);
+  color: var(--text-dark);
+  box-shadow: 0 8px 0 var(--primary);
+}
+
+.tab-btn.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: white;
+  box-shadow: 0 6px 0 var(--primary-shadow);
+  transform: translateY(-2px);
+}
+
+.tab-btn.active .tab-icon { transform: scale(1.15) rotate(-5deg); }
+
+.tab-btn:active, .tab-btn.active:active {
+  transform: translateY(4px);
+  box-shadow: 0 0 0 transparent;
+}
+
+.tab-icon { font-size: 24px; transition: transform 0.2s;}
+
+/* CONTENT GRID */
+.content-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+@media (min-width: 1024px) {
+  .content-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 32px;
+    align-items: start;
+  }
+  .col-12 { grid-column: span 12; }
+  .col-8 { grid-column: span 8; }
+  .col-7 { grid-column: span 7; }
+  .col-6 { grid-column: span 6; }
+  .col-5 { grid-column: span 5; }
+  .col-4 { grid-column: span 4; }
+  .col-span-full { grid-column: 1 / -1; }
+}
+
+/* CARDS */
+.card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 32px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+  border: 4px solid white;
+  transition: transform 0.3s, border-color 0.3s;
+  width: 100%;
+}
+
+@media (min-width: 1024px) { .card { padding: 40px; } }
+
+.card:hover { border-color: #D1FAE5; transform: translateY(-4px); }
+
+.card-title {
+  font-size: 24px;
+  font-weight: 900;
+  margin: 0 0 24px 0;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: var(--text-dark);
+}
+
+.card-icon {
+  font-size: 32px;
+  background: var(--secondary);
+  min-width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(253, 230, 138, 0.4);
+}
 
 .fade-in { animation: fadeIn 0.4s ease-out forwards; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 24px; }
-.stat-box { background: #F8FAFC; padding: 24px; border-radius: 20px; text-align: center; border: 2px solid #F1F5F9; transition: all 0.2s; }
-.stat-box:hover { transform: scale(1.02); background: white; border-color: var(--primary); box-shadow: var(--shadow-hover); }
-.stat-emoji { font-size: 40px; margin-bottom: 12px; }
-.stat-val { font-size: 28px; font-weight: 900; color: var(--text-dark); margin-bottom: 4px; }
-.stat-lbl { font-size: 14px; font-weight: 700; color: var(--text-gray); }
-
-.score-wrapper { display: flex; flex-direction: column; align-items: center; margin: 20px 0 40px; }
-.score-bubble { width: 150px; height: 150px; background: var(--primary); border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4); border: 8px solid #D1FAE5; transform: rotate(-5deg); transition: transform 0.3s; }
+/* UI PRIMITIVES */
+.score-wrapper { display: flex; flex-direction: column; align-items: center; padding: 20px 0; }
+.score-bubble { 
+  width: 160px; height: 160px; background: var(--primary); border-radius: 50%;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  color: white; border: 8px solid #D1FAE5; transform: rotate(-5deg); transition: transform 0.3s;
+  box-shadow: 0 12px 30px rgba(16, 185, 129, 0.3);
+}
 .score-bubble:hover { transform: rotate(5deg) scale(1.05); }
-.score-num { font-size: 48px; font-weight: 900; line-height: 1; }
-.score-text { font-size: 14px; font-weight: 800; letter-spacing: 1px; margin-top: 4px;}
+.score-num { font-size: 56px; font-weight: 900; line-height: 1; }
+.score-text { font-size: 16px; font-weight: 900; letter-spacing: 1px; margin-top: 4px; text-transform: uppercase;}
 
-.friendly-bar-container { margin-bottom: 20px; }
-.friendly-bar-header { display: flex; justify-content: space-between; font-weight: 700; margin-bottom: 8px; font-size: 15px;}
-.friendly-bar-bg { height: 16px; background: #E2E8F0; border-radius: 10px; overflow: hidden; }
-.friendly-bar-fill { height: 100%; border-radius: 10px; background: var(--primary); transition: width 1s ease-out; }
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+.stat-box { background: #F8FAFC; padding: 24px; border-radius: 24px; border: 4px solid #E2E8F0; transition: all 0.2s; text-align: center; }
+.stat-box:hover { transform: translateY(-4px); background: white; border-color: var(--primary); box-shadow: 0 8px 24px rgba(16, 185, 129, 0.2); }
+.stat-emoji { font-size: 48px; margin-bottom: 12px; }
+.stat-val { font-size: 32px; font-weight: 900; color: var(--text-dark); margin-bottom: 4px; }
+.stat-lbl { font-size: 15px; font-weight: 800; color: var(--text-gray); }
+
+.friendly-bar-container { margin-bottom: 24px; }
+.friendly-bar-header { display: flex; justify-content: space-between; font-weight: 800; margin-bottom: 12px; font-size: 16px;}
+.friendly-bar-bg { height: 20px; background: #E2E8F0; border-radius: 20px; overflow: hidden; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05); }
+.friendly-bar-fill { height: 100%; border-radius: 20px; background: var(--primary); transition: width 1s ease-out; }
 
 /* LEADERBOARD */
 .leaderboard { display: flex; flex-direction: column; gap: 16px; }
-.leader-row { display: flex; align-items: center; background: #F8FAFC; border: 2px solid #F1F5F9; padding: 16px 20px; border-radius: 20px; transition: all 0.2s;}
-.leader-row:hover { background: white; border-color: var(--primary); box-shadow: var(--shadow-sm); transform: translateX(5px); }
-.leader-rank { font-size: 24px; font-weight: 900; width: 40px; color: var(--text-gray); }
+.leader-row { 
+  display: flex; align-items: center; background: #F8FAFC; border: 4px solid #E2E8F0; 
+  padding: 16px 20px; border-radius: 20px; transition: all 0.2s;
+}
+.leader-row:hover { background: white; border-color: var(--primary); transform: translateX(5px); }
+.leader-rank { font-size: 24px; font-weight: 900; width: 48px; color: var(--text-gray); }
 .leader-name { flex: 1; font-weight: 800; font-size: 18px; color: var(--text-dark); }
-.leader-stat { font-weight: 900; font-size: 20px; color: var(--danger-text); display: flex; align-items: center; gap: 8px;}
+.leader-stat { font-weight: 900; font-size: 22px; color: var(--danger-text); display: flex; align-items: center; gap: 8px;}
 
-/* FORMS */
-.input-label { display: block; font-weight: 800; margin-bottom: 10px; color: var(--text-dark); font-size: 16px;}
-.input-field { width: 100%; padding: 16px 20px; border-radius: 16px; border: 3px solid #E2E8F0; font-size: 16px; font-weight: 600; font-family: inherit; color: var(--text-dark); background: #F8FAFC; margin-bottom: 24px; transition: all 0.2s; appearance: none; }
-select.input-field { background: #F8FAFC url('data:image/svg+xml;utf8,<svg width="12" height="8" viewBox="0 0 12 8" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L6 6L11 1" stroke="%234B5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>') no-repeat right 20px center; }
-.input-field:focus { outline: none; border-color: var(--primary); background: white; box-shadow: 0 0 0 6px rgba(16, 185, 129, 0.15); }
-.pill-options { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 30px; }
-.pill-btn { padding: 12px 20px; border-radius: 100px; border: 3px solid #E2E8F0; background: white; font-weight: 700; font-size: 15px; color: var(--text-gray); cursor: pointer; transition: all 0.2s; }
-.pill-btn:hover { background: #F1F5F9; transform: scale(1.05); }
-.pill-btn.selected { border-color: var(--primary); background: #D1FAE5; color: var(--text-dark); }
-.action-btn { width: 100%; padding: 18px; background: var(--primary); color: white; border: none; border-radius: 16px; font-size: 18px; font-weight: 800; cursor: pointer; transition: all 0.2s; box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3); display: flex; align-items: center; justify-content: center; gap: 10px; }
-.action-btn:hover { background: var(--primary-hover); transform: translateY(-3px); box-shadow: 0 12px 25px rgba(16, 185, 129, 0.4); }
-.action-btn:active { transform: scale(0.96); }
+/* CHUNKY FORMS */
+.input-label { display: block; font-weight: 900; margin-bottom: 12px; color: var(--text-dark); font-size: 18px;}
+.input-field { 
+  width: 100%; padding: 20px 24px; border-radius: 20px; border: 4px solid #E2E8F0; 
+  font-size: 18px; font-weight: 800; font-family: inherit; color: var(--text-dark); 
+  background: #F8FAFC; margin-bottom: 32px; transition: all 0.2s; appearance: none; 
+}
+select.input-field { background: #F8FAFC url('data:image/svg+xml;utf8,<svg width="16" height="10" viewBox="0 0 16 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 2.5L8 7.5L13.5 2.5" stroke="%234B5563" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>') no-repeat right 24px center; }
+.input-field:focus { outline: none; border-color: var(--primary); background: white; box-shadow: 0 4px 0 var(--primary-shadow); transform: translateY(-2px);}
 
-/* RECENT LIST */
+.pill-options { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 40px; }
+.pill-btn { 
+  padding: 16px 24px; border-radius: 100px; border: 4px solid #E2E8F0; background: white; 
+  font-weight: 800; font-size: 16px; color: var(--text-gray); cursor: pointer; transition: all 0.1s; 
+  box-shadow: 0 4px 0 #E2E8F0;
+}
+.pill-btn:hover { background: #F1F5F9; transform: translateY(-2px); box-shadow: 0 6px 0 #CBD5E1; color: var(--text-dark);}
+.pill-btn.selected { 
+  border-color: var(--primary); background: #D1FAE5; color: var(--text-dark); 
+  box-shadow: 0 6px 0 var(--primary-shadow); transform: translateY(-2px);
+}
+.pill-btn:active, .pill-btn.selected:active { transform: translateY(4px); box-shadow: 0 0 0 transparent; }
+
+.action-btn { 
+  width: 100%; padding: 20px; background: var(--primary); color: white; border: none; 
+  border-radius: 24px; font-size: 22px; font-weight: 900; cursor: pointer; transition: all 0.1s; 
+  box-shadow: 0 8px 0 var(--primary-shadow); display: flex; align-items: center; justify-content: center; gap: 12px; 
+}
+.action-btn:hover { background: var(--primary-hover); transform: translateY(-2px); box-shadow: 0 10px 0 var(--primary-shadow); }
+.action-btn:active { transform: translateY(8px); box-shadow: 0 0 0 transparent; }
+
+/* RECENT HISTORY CHUNKS */
 .history-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 16px; margin-top: 24px; }
-.history-card { display: flex; justify-content: space-between; align-items: center; padding: 20px; border-radius: 20px; background: #F8FAFC; border: 2px solid #F1F5F9; transition: all 0.2s; }
-.history-card:hover { border-color: var(--secondary); background: white; transform: scale(1.01); }
-.h-info { display: flex; align-items: center; gap: 16px; }
-.h-icon { font-size: 32px; background: white; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; border-radius: 16px; box-shadow: var(--shadow-sm); flex-shrink: 0;}
-.h-title { font-weight: 800; font-size: 18px; color: var(--text-dark); margin-bottom: 4px; }
-.h-sub { font-size: 14px; font-weight: 600; color: var(--text-gray); }
-.h-delete { background: var(--danger-light); color: var(--danger-text); border: none; width: 40px; height: 40px; border-radius: 12px; font-size: 20px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; }
+.history-card { 
+  display: flex; justify-content: space-between; align-items: center; padding: 24px; 
+  border-radius: 24px; background: #FFF; border: 4px solid #F1F5F9; transition: all 0.2s; 
+  box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+}
+.history-card:hover { border-color: var(--secondary); transform: translateX(4px); box-shadow: 0 8px 20px rgba(253, 230, 138, 0.4);}
+.h-info { display: flex; align-items: center; gap: 20px; }
+.h-icon { font-size: 40px; background: #F8FAFC; width: 72px; height: 72px; display: flex; align-items: center; justify-content: center; border-radius: 20px; }
+.h-title { font-weight: 900; font-size: 20px; color: var(--text-dark); margin-bottom: 6px; }
+.h-sub { font-size: 15px; font-weight: 700; color: var(--text-gray); }
+.h-delete { 
+  background: var(--danger-light); color: var(--danger-text); border: none; width: 56px; height: 56px; 
+  border-radius: 16px; font-size: 28px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; 
+}
 .h-delete:hover { background: #FECACA; transform: scale(1.1) rotate(5deg); }
 
-/* AI TIPS CARDS */
-.tips-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
-.tip-card { padding: 24px; border-radius: 24px; text-align: left; transition: transform 0.2s; position: relative; overflow: hidden;}
-.tip-card:hover { transform: translateY(-5px); }
-.tip-emoji { font-size: 40px; margin-bottom: 12px; background: rgba(255,255,255,0.5); width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; border-radius: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);}
-.tip-title { font-size: 18px; font-weight: 800; margin-bottom: 8px; color: var(--text-dark); line-height: 1.3;}
-.tip-desc { font-size: 15px; font-weight: 600; line-height: 1.5; color: rgba(0,0,0,0.7); }
+/* AI TIPS GRID */
+.tips-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+.tip-card { padding: 32px; border-radius: 24px; text-align: left; transition: transform 0.2s; border: 4px solid transparent;}
+.tip-card:hover { transform: translateY(-5px); border-color: white;}
+.tip-emoji { font-size: 48px; margin-bottom: 20px; background: rgba(255,255,255,0.5); width: 72px; height: 72px; display: flex; align-items: center; justify-content: center; border-radius: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);}
+.tip-title { font-size: 20px; font-weight: 900; margin-bottom: 12px; color: var(--text-dark); line-height: 1.3;}
+.tip-desc { font-size: 16px; font-weight: 700; line-height: 1.6; color: rgba(0,0,0,0.7); }
 
-.loader-wrapper { display: flex; flex-direction: column; align-items: center; padding: 40px 0; gap: 20px; }
-.fun-spinner { font-size: 50px; animation: wobble 1.5s infinite; }
+.loader-wrapper { display: flex; flex-direction: column; align-items: center; padding: 60px 0; gap: 24px; }
+.fun-spinner { font-size: 64px; animation: wobble 1.5s infinite; }
 @keyframes wobble { 0%, 100% { transform: rotate(0deg) scale(1); } 25% { transform: rotate(-20deg) scale(1.1); } 50% { transform: rotate(0deg) scale(1); } 75% { transform: rotate(20deg) scale(1.1); } }
-.success-message { margin-top: 24px; background: #D1FAE5; color: #065F46; padding: 20px; border-radius: 16px; text-align: center; font-weight: 800; font-size: 16px; display: flex; align-items: center; justify-content: center; gap: 10px; animation: fadeIn 0.3s forwards; }
+.success-message { margin-top: 32px; background: #D1FAE5; color: #065F46; padding: 24px; border-radius: 20px; border: 4px solid #10B981; text-align: center; font-weight: 900; font-size: 18px; display: flex; align-items: center; justify-content: center; gap: 12px; animation: fadeIn 0.3s forwards; }
 `;
 
-// Helper component for colorful tip cards
 const TipCard = ({ icon, title, desc, bg }) => (
   <div className="tip-card" style={{ background: bg }}>
     <div className="tip-emoji">{icon}</div>
@@ -214,9 +424,10 @@ const DashboardView = ({ logs, activeMess, messes }) => {
   const sortedMesses = Object.entries(messWasteMap).sort((a,b) => b[1]-a[1]);
 
   return (
-    <div className="fade-in">
-      <div className="score-wrapper">
-        <h2 style={{margin: '0 0 20px 0', fontSize: '24px', fontWeight: 800}}>
+    <div className="content-grid fade-in">
+      
+      <div className="card col-4" style={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+        <h2 style={{margin: '0 0 24px 0', fontSize: '26px', fontWeight: 900, textAlign: 'center'}}>
           {activeMess === 'All Campus' ? 'Total Campus Score 🌟' : `${activeMess} Score 🌟`}
         </h2>
         <div className="score-bubble">
@@ -225,10 +436,10 @@ const DashboardView = ({ logs, activeMess, messes }) => {
         </div>
       </div>
 
-      <div className="stats-grid">
+      <div className="col-8 stats-grid">
         <div className="stat-box">
           <div className="stat-emoji">🗑️</div>
-          <div className="stat-val">{totalWaste.toFixed(1)} <span style={{fontSize: '18px'}}>kg</span></div>
+          <div className="stat-val">{totalWaste.toFixed(1)} <span style={{fontSize: '20px'}}>kg</span></div>
           <div className="stat-lbl">Food Wasted</div>
         </div>
         <div className="stat-box">
@@ -236,7 +447,7 @@ const DashboardView = ({ logs, activeMess, messes }) => {
           <div className="stat-val">₹{costLoss.toFixed(0)}</div>
           <div className="stat-lbl">Money Lost</div>
         </div>
-        <div className="stat-box">
+        <div className="stat-box" style={{borderColor: '#FDE68A'}}>
           <div className="stat-emoji">🍱</div>
           <div className="stat-val" style={{color: '#D97706'}}>{mealsLost}</div>
           <div className="stat-lbl" style={{color: '#D97706'}}>Meals we could have saved</div>
@@ -244,25 +455,22 @@ const DashboardView = ({ logs, activeMess, messes }) => {
       </div>
 
       {activeMess === 'All Campus' && (
-        <div className="card">
-          <div className="card-title">
-            <div className="card-icon">🏆</div>
-            Campus Leaderboard
-          </div>
-          <p style={{fontWeight: 600, color: 'var(--text-gray)', marginBottom: '24px'}}>Which mess is contributing the most to our waste footprint?</p>
+        <div className="card col-6">
+          <div className="card-title"><div className="card-icon">🏆</div> Campus Leaderboard</div>
+          <p style={{fontWeight: 700, color: 'var(--text-gray)', marginBottom: '24px', fontSize: '16px'}}>Which mess is contributing the most to our waste footprint?</p>
           
           <div className="leaderboard">
             {sortedMesses.map(([mName, mWaste], idx) => {
               let medal = "⭐";
               if(idx === 0) medal = "😢";
-              if(idx === sortedMesses.length - 1) medal = "👑"; // lowest waste!
+              if(idx === sortedMesses.length - 1) medal = "👑"; 
               
               return (
                 <div key={mName} className="leader-row" style={idx === sortedMesses.length - 1 ? {borderColor: 'var(--primary)', background: '#F0FDF4'} : {}}>
                   <div className="leader-rank">{idx + 1}</div>
                   <div className="leader-name">{mName}</div>
                   <div className="leader-stat">
-                    {mWaste.toFixed(1)}kg <span style={{fontSize: '24px'}}>{medal}</span>
+                    {mWaste.toFixed(1)}kg <span style={{fontSize: '28px', marginLeft: '6px'}}>{medal}</span>
                   </div>
                 </div>
               );
@@ -271,14 +479,10 @@ const DashboardView = ({ logs, activeMess, messes }) => {
         </div>
       )}
 
-      <div className="card">
-        <div className="card-title">
-          <div className="card-icon">🍕</div>
-          What are we throwing away most?
-        </div>
-        
+      <div className={activeMess === 'All Campus' ? "card col-6" : "card col-12"}>
+        <div className="card-title"><div className="card-icon">🍕</div> What are we throwing away most?</div>
         {Object.keys(typeMap).length === 0 ? (
-          <p style={{fontWeight: 600, color: 'var(--text-gray)'}}>We haven't tracked anything yet. Nice job!</p>
+          <p style={{fontWeight: 700, color: 'var(--text-gray)', fontSize: '16px'}}>We haven't tracked anything yet. Nice job!</p>
         ) : (
           Object.entries(typeMap).sort((a,b) => b[1]-a[1]).map(([type, qty], i) => {
             const colors = ['#10B981', '#F59E0B', '#3B82F6', '#EC4899', '#8B5CF6'];
@@ -286,6 +490,7 @@ const DashboardView = ({ logs, activeMess, messes }) => {
           })
         )}
       </div>
+
     </div>
   );
 };
@@ -299,7 +504,6 @@ const LogWasteView = ({ logs, setLogs, activeMess, messes }) => {
   const [selectedMess, setSelectedMess] = useState(activeMess === 'All Campus' ? messes[0] : activeMess);
   const [showYay, setShowYay] = useState(false);
 
-  // Sync selected mess if global context changes
   React.useEffect(() => {
     if(activeMess !== 'All Campus') setSelectedMess(activeMess);
   }, [activeMess]);
@@ -307,17 +511,11 @@ const LogWasteView = ({ logs, setLogs, activeMess, messes }) => {
   const saveEntry = (e) => {
     e.preventDefault();
     if(!quantity || isNaN(quantity) || Number(quantity) <= 0) return;
-    
     const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     const today = days[new Date().getDay()];
 
     const entry = {
-      id: Date.now(),
-      messName: selectedMess,
-      foodType,
-      mealSlot,
-      quantity: Number(quantity),
-      date: today
+      id: Date.now(), messName: selectedMess, foodType, mealSlot, quantity: Number(quantity), date: today
     };
     
     setLogs([entry, ...logs]);
@@ -326,167 +524,112 @@ const LogWasteView = ({ logs, setLogs, activeMess, messes }) => {
     setTimeout(() => setShowYay(false), 3000);
   };
 
-  const getEmojiForFood = (food) => {
-    const map = { 'Rice': '🍚', 'Dal': '🍲', 'Sabzi': '🥗', 'Roti': '🫓', 'Snacks': '🍟', 'Other': '🍽️' };
-    return map[food] || '🍽️';
-  };
-  
-  // Only show history for selected mess in log view
   const visibleLogs = logs.filter(l => l.messName === selectedMess);
+  const getEmojiForFood = (f) => ({ 'Rice': '🍚', 'Dal': '🍲', 'Sabzi': '🥗', 'Roti': '🫓', 'Snacks': '🍟', 'Other': '🍽️' }[f] || '🍽️');
 
   return (
-    <div className="fade-in">
-      <div className="card" style={{border: '4px solid #D1FAE5'}}>
-        <div className="card-title">
-          <div className="card-icon">📝</div>
-          Track New Food Waste
-        </div>
-        <p style={{fontWeight: 600, marginBottom: '24px', color: 'var(--text-gray)'}}>
+    <div className="content-grid fade-in">
+      <div className="card col-6" style={{border: '4px solid #D1FAE5'}}>
+        <div className="card-title"><div className="card-icon">📝</div> Track New Food Waste</div>
+        <p style={{fontWeight: 700, fontSize: '16px', marginBottom: '32px', color: 'var(--text-gray)'}}>
           Let's log the leftovers securely so we can help the specific mess cook smarter!
         </p>
 
         <form onSubmit={saveEntry}>
-          
-          <label className="input-label">Which Mess are you recording for?</label>
+          <label className="input-label">🏢 Which Mess are you recording for?</label>
           <select className="input-field" value={selectedMess} onChange={e => setSelectedMess(e.target.value)}>
             {messes.map(m => <option key={m} value={m}>{m}</option>)}
           </select>
           
-          <label className="input-label">What kind of food was it?</label>
+          <label className="input-label">🍕 What kind of food was it?</label>
           <select className="input-field" value={foodType} onChange={e => setFoodType(e.target.value)}>
-            <option>Rice</option>
-            <option>Dal</option>
-            <option>Sabzi</option>
-            <option>Roti</option>
-            <option>Snacks</option>
-            <option>Other</option>
+            <option>Rice</option><option>Dal</option><option>Sabzi</option>
+            <option>Roti</option><option>Snacks</option><option>Other</option>
           </select>
 
-          <label className="input-label">How much? (in kilograms)</label>
-          <input 
-            type="number" step="0.1"
-            className="input-field" 
-            placeholder="e.g. 2.5" 
-            value={quantity} 
-            onChange={e => setQuantity(e.target.value)} 
-          />
+          <label className="input-label">⚖️ How much? (in kilograms)</label>
+          <input type="number" step="0.1" className="input-field" placeholder="e.g. 2.5" value={quantity} onChange={e => setQuantity(e.target.value)} />
           
-          <label className="input-label">Which meal was this from?</label>
+          <label className="input-label">🕒 Which meal was this from?</label>
           <div className="pill-options">
             {['Breakfast', 'Lunch', 'Evening', 'Dinner'].map(slot => (
-              <button 
-                type="button" key={slot} 
-                className={"pill-btn " + (mealSlot === slot ? "selected" : "")}
-                onClick={() => setMealSlot(slot)}
-              >
-                {slot}
-              </button>
+              <button type="button" key={slot} className={"pill-btn " + (mealSlot === slot ? "selected" : "")} onClick={() => setMealSlot(slot)}>{slot}</button>
             ))}
           </div>
 
           <button type="submit" className="action-btn">
-            <span>💾</span> Save to {selectedMess} Records
+            <span>💾</span> Save to {selectedMess}
           </button>
           
           {showYay && (
-            <div className="success-message">
-              <span style={{fontSize: '24px'}}>🎉</span> Awesome! You're helping {selectedMess} get smarter!
-            </div>
+            <div className="success-message"><span style={{fontSize: '32px'}}>🎉</span> Awesome! You're helping {selectedMess} get smarter!</div>
           )}
         </form>
       </div>
 
-      <h3 style={{fontSize: '20px', fontWeight: 800, margin: '32px 0 0'}}>Recent Activity for {selectedMess} 🕒</h3>
-      <ul className="history-list">
-        {visibleLogs.map(log => (
-          <li key={log.id} className="history-card">
-            <div className="h-info">
-              <div className="h-icon">{getEmojiForFood(log.foodType)}</div>
-              <div>
-                <div className="h-title">{log.quantity} kg of {log.foodType}</div>
-                <div className="h-sub">{log.mealSlot} &bull; {log.date}</div>
+      <div className="col-6">
+        <h3 style={{fontSize: '24px', fontWeight: 900, margin: '0 0 16px', color: 'var(--text-dark)'}}>Recent Activity for {selectedMess} 🕒</h3>
+        <ul className="history-list mt-0">
+          {visibleLogs.map(log => (
+            <li key={log.id} className="history-card">
+              <div className="h-info">
+                <div className="h-icon">{getEmojiForFood(log.foodType)}</div>
+                <div>
+                  <div className="h-title">{log.quantity} kg of {log.foodType}</div>
+                  <div className="h-sub">{log.mealSlot} &bull; {log.date}</div>
+                </div>
               </div>
-            </div>
-            <button type="button" className="h-delete" onClick={() => setLogs(logs.filter(l => l.id !== log.id))} title="Remove entry">×</button>
-          </li>
-        ))}
-        {visibleLogs.length === 0 && <p style={{fontWeight: 700, color: 'var(--text-gray)', textAlign: 'center', padding: '20px'}}>No waste logged recently for this mess!</p>}
-      </ul>
+              <button type="button" className="h-delete" onClick={() => setLogs(logs.filter(l => l.id !== log.id))} title="Remove entry">×</button>
+            </li>
+          ))}
+          {visibleLogs.length === 0 && <p style={{fontWeight: 800, fontSize: '18px', color: 'var(--text-gray)', textAlign: 'center', padding: '40px'}}>No waste logged recently for this mess!</p>}
+        </ul>
+      </div>
     </div>
   );
 };
 
 
 // 3. AI Tips View
-const AiTipsView = ({ activeMess, messes, logs }) => {
+const AiTipsView = ({ activeMess }) => {
   const [loading, setLoading] = useState(false);
   const [showTips, setShowTips] = useState(false);
+  React.useEffect(() => { setShowTips(false); }, [activeMess]);
 
-  // Sync effect if context changes while tips are open
-  React.useEffect(() => {
-    setShowTips(false);
-  }, [activeMess]);
+  const getTips = () => { setLoading(true); setShowTips(false); setTimeout(() => { setLoading(false); setShowTips(true); }, 1500); };
 
-  const getTips = () => {
-    setLoading(true); setShowTips(false);
-    setTimeout(() => { setLoading(false); setShowTips(true); }, 1500);
-  };
-
-  const getDynamicTips = () => {
-    if (activeMess === 'All Campus') {
-      return [
-        { bg: "#FEF3C7", icon: "🏢", title: "Standardize Rice Pots", desc: "North Campus Mess is wasting 30% more Rice than South Campus! Consider standardizing pot sizes across campus." },
-        { bg: "#D1FAE5", icon: "🌱", title: "Expand South's Composting", desc: "South Campus Mess handles 50% of the campus's organic waste. They need a larger compost bin immediately." },
-        { bg: "#DBEAFE", icon: "👥", title: "Shift Girls Hostel Dinner", desc: "Girls Hostel wastes more during dinner. Adjusting their dinner serving timing by 30 mins could drastically help." }
-      ];
-    } else {
-      // Fake dynamic localized tips
-      return [
-        { bg: "#FEF3C7", icon: "🍚", title: "Cook less Rice for Lunch", desc: `Rice is the #1 wasted item at ${activeMess}! Try making 2 bowls less than usual.` },
-        { bg: "#D1FAE5", icon: "🍎", title: "Use Veggie Peels", desc: "Don't throw away potato or carrot peels! Give them to the student gardeners." },
-        { bg: "#FCE7F3", icon: "📝", title: "Use Smaller Spoons", desc: "If you physically switch the serving spoon to a smaller size, total waste drops automatically!" }
-      ];
-    }
-  };
+  const tips = activeMess === 'All Campus' ? [
+    { bg: "#FEF3C7", icon: "🏢", title: "Standardize Rice Pots", desc: "North Campus Mess is wasting 30% more Rice than South Campus! Consider standardizing pot sizes across campus." },
+    { bg: "#D1FAE5", icon: "🌱", title: "Expand South's Composting", desc: "South Campus Mess handles 50% of the campus's organic waste. They need a larger compost bin immediately." },
+    { bg: "#DBEAFE", icon: "👥", title: "Shift Girls Hostel Dinner", desc: "Girls Hostel wastes more during dinner. Adjusting their dinner serving timing by 30 mins could drastically help." }
+  ] : [
+    { bg: "#FEF3C7", icon: "🍚", title: "Cook less Rice for Lunch", desc: `Rice is the #1 wasted item at ${activeMess}! Try making 2 bowls less than usual.` },
+    { bg: "#D1FAE5", icon: "🍎", title: "Use Veggie Peels", desc: "Don't throw away potato or carrot peels! Give them to the student gardeners." },
+    { bg: "#FCE7F3", icon: "📝", title: "Use Smaller Spoons", desc: "If you physically switch the serving spoon to a smaller size, total waste drops automatically!" }
+  ];
 
   return (
-    <div className="fade-in card">
-      <div className="card-title" style={{fontSize: '28px', flexDirection: 'column', alignItems: 'center', gap: '16px', textAlign: 'center'}}>
-        <span style={{fontSize: '64px', animation: 'bounce 2s infinite'}}>💡</span>
-        Smart Tips for {activeMess}!
+    <div className="content-grid fade-in">
+      <div className="card col-span-full" style={{textAlign: 'center', padding: '60px 40px'}}>
+        <span style={{fontSize: '80px', display: 'inline-block', animation: 'bounce 2s infinite', marginBottom: '20px'}}>💡</span>
+        <h2 style={{fontSize: '36px', fontWeight: 900, margin: '0 0 16px', color: 'var(--text-dark)'}}>Smart Tips for {activeMess}!</h2>
+        <p style={{fontSize: '20px', fontWeight: 700, color: 'var(--text-gray)', maxWidth: '700px', margin: '0 auto 40px', lineHeight: 1.5}}>
+          Our friendly AI bot looks at the specific footprint of {activeMess}, and generates tailored, super-simple fixes!
+        </p>
+
+        {!showTips && !loading && <button className="action-btn" style={{maxWidth: '400px', margin: '0 auto'}} onClick={getTips}>✨ Analyze Current Traffic</button>}
+
+        {loading && <div className="loader-wrapper"><div className="fun-spinner">🤖</div><h3 style={{margin: 0, color: 'var(--primary)', fontWeight: 900, fontSize: '24px'}}>Scanning the local data...</h3></div>}
+
+        {showTips && (
+          <div className="fade-in">
+            <div className="tips-grid" style={{marginTop: '20px'}}>
+              {tips.map((t, i) => <TipCard key={i} bg={t.bg} icon={t.icon} title={t.title} desc={t.desc} />)}
+            </div>
+            <button className="pill-btn selected" style={{marginTop: '40px', padding: '16px 32px', fontSize: '18px'}} onClick={() => setShowTips(false)}>Close Analysis</button>
+          </div>
+        )}
       </div>
-      <p style={{textAlign: 'center', fontSize: '18px', fontWeight: 600, color: 'var(--text-gray)', marginBottom: '40px'}}>
-        Our friendly AI bot looks at the specific footprint of {activeMess}, and generates tailored, simple fixes!
-      </p>
-
-      {!showTips && !loading && (
-        <div style={{display: 'flex', justifyContent: 'center'}}>
-          <button className="action-btn" style={{maxWidth: '400px'}} onClick={getTips}>
-            ✨ Analyze {activeMess} Traffic
-          </button>
-        </div>
-      )}
-
-      {loading && (
-        <div className="loader-wrapper">
-          <div className="fun-spinner">🤖</div>
-          <h3 style={{margin: 0, color: 'var(--primary)', fontWeight: 800}}>Looking into the local data...</h3>
-        </div>
-      )}
-
-      {showTips && (
-        <div className="fade-in">
-          <div className="tips-grid">
-             {getDynamicTips().map((t, i) => (
-                <TipCard key={i} bg={t.bg} icon={t.icon} title={t.title} desc={t.desc} />
-             ))}
-          </div>
-          
-          <div style={{display: 'flex', justifyContent: 'center', marginTop: '40px'}}>
-            <button className="pill-btn selected" onClick={() => setShowTips(false)}>Close Analysis</button>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
@@ -494,27 +637,29 @@ const AiTipsView = ({ activeMess, messes, logs }) => {
 
 // 4. Learn View
 const LearnView = () => (
-  <div className="fade-in card">
-    <div className="card-title"><div className="card-icon">📚</div> Learn Good Habits!</div>
-    <p style={{fontWeight: 700, fontSize: '16px', color: 'var(--text-gray)', marginBottom: '32px'}}>
-      Whether you work in the North Mess or South Mess, these standard practices keep us perfectly green!
-    </p>
+  <div className="content-grid fade-in">
+    <div className="card col-span-full">
+      <div className="card-title"><div className="card-icon">📚</div> Learn Good Habits!</div>
+      <p style={{fontWeight: 800, fontSize: '18px', color: 'var(--text-gray)', marginBottom: '40px'}}>
+        Whether you work in the North Mess or South Mess, these standard practices keep us perfectly green!
+      </p>
 
-    <div style={{display: 'flex', flexDirection: 'column', gap: '16px'}}>
-      {[
-        { i: '🍽️', t: 'Serve Small, Refill Free', d: 'Always give a small amount first. Students can come back for more if they are still hungry!' },
-        { i: '🔥', t: 'Cook Slowly at the End', d: 'When it gets close to closing time, only make fresh food if students are actively waiting.' },
-        { i: '🤝', t: 'Share Leftovers', d: 'If we have untouched, clean food left, we pack it and send it to local shelters immediately.' },
-        { i: '🌱', t: 'Compost is Food for Plants', d: 'Food scraps are super healthy for our campus trees! Put scraps in the green bin, not the black bin.' }
-      ].map((item, idx) => (
-        <div key={idx} style={{display: 'flex', gap: '20px', padding: '20px', background: '#F8FAFC', borderRadius: '20px', alignItems: 'center'}}>
-           <div style={{fontSize: '40px'}}>{item.i}</div>
-           <div>
-             <h4 style={{margin: '0 0 4px', fontSize: '18px', fontWeight: 800, color: 'var(--text-dark)'}}>{item.t}</h4>
-             <p style={{margin: 0, fontWeight: 600, color: 'var(--text-gray)'}}>{item.d}</p>
-           </div>
-        </div>
-      ))}
+      <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px'}}>
+        {[
+          { i: '🍽️', t: 'Serve Small, Refill Free', d: 'Always give a small amount first. Students can come back for more if they are still hungry!' },
+          { i: '🔥', t: 'Cook Slowly at the End', d: 'When it gets close to closing time, only make fresh food if students are actively waiting.' },
+          { i: '🤝', t: 'Share Leftovers', d: 'If we have untouched, clean food left, we pack it and send it to local shelters immediately.' },
+          { i: '🌱', t: 'Compost is Food for Plants', d: 'Food scraps are super healthy for our campus trees! Put scraps in the green bin, not the black bin.' }
+        ].map((item, idx) => (
+          <div key={idx} style={{display: 'flex', gap: '24px', padding: '32px', background: '#F8FAFC', borderRadius: '24px', border: '4px solid #E2E8F0'}}>
+             <div style={{fontSize: '48px', lineHeight: 1}}>{item.i}</div>
+             <div>
+               <h4 style={{margin: '0 0 8px', fontSize: '20px', fontWeight: 900, color: 'var(--text-dark)'}}>{item.t}</h4>
+               <p style={{margin: 0, fontWeight: 700, fontSize: '16px', color: 'var(--text-gray)', lineHeight: 1.5}}>{item.d}</p>
+             </div>
+          </div>
+        ))}
+      </div>
     </div>
   </div>
 );
@@ -522,16 +667,16 @@ const LearnView = () => (
 
 // 5. Survey View
 const SurveyView = () => (
-  <div className="fade-in">
-    <div className="card" style={{border: '4px solid #FDE68A'}}>
+  <div className="content-grid fade-in">
+    <div className="card col-span-full" style={{border: '4px solid #FDE68A'}}>
       <div className="card-title"><div className="card-icon">🤔</div> What did students say?</div>
-      <p style={{fontWeight: 700, marginBottom: '24px'}}>We walked around campus visiting all the messes and asked everyone about the food. Here is what we found:</p>
+      <p style={{fontWeight: 800, fontSize: '18px', marginBottom: '32px', color: 'var(--text-gray)'}}>We walked around campus visiting all the messes and asked everyone about the food. Here is what we found:</p>
       
-      <ul style={{fontSize: '16px', fontWeight: 700, color: 'var(--text-dark)', lineHeight: '2', paddingLeft: '20px', margin: 0}}>
-        <li><span style={{fontSize: '20px'}}>❌</span> Canteens have zero communication with each other about over-catering.</li>
-        <li><span style={{fontSize: '20px'}}>🚮</span> Food scraps and plastic wrappers are being thrown in the exact same dustbin.</li>
-        <li><span style={{fontSize: '20px'}}>🥡</span> A lot of perfectly good food gets tossed because there's no system to share it before it spoils.</li>
-        <li style={{color: 'var(--primary)'}}><span style={{fontSize: '20px'}}>✅</span> Good news: The mess workers said they would eagerly use a multi-canteen app to track their specific locations!</li>
+      <ul style={{fontSize: '18px', fontWeight: 800, color: 'var(--text-dark)', lineHeight: '2.2', paddingLeft: '24px', margin: 0}}>
+        <li><span style={{fontSize: '24px'}}>❌</span> Canteens have zero communication with each other about over-catering.</li>
+        <li><span style={{fontSize: '24px'}}>🚮</span> Food scraps and plastic wrappers are being thrown in the exact same dustbin.</li>
+        <li><span style={{fontSize: '24px'}}>🥡</span> Perfectly good food gets tossed because there's no system to share it before it spoils.</li>
+        <li style={{color: 'var(--primary)'}}><span style={{fontSize: '24px'}}>✅</span> Good news: The mess workers said they would eagerly use a multi-canteen app to track their specific locations!</li>
       </ul>
     </div>
   </div>
@@ -540,33 +685,35 @@ const SurveyView = () => (
 
 // 6. About View
 const ObjectiveView = () => (
-  <div className="fade-in card" style={{textAlign: 'center', background: 'white', padding: '60px 40px'}}>
-    <div style={{fontSize: '80px', marginBottom: '20px'}}>👋🌍</div>
-    <h2 style={{fontSize: '32px', margin: '0 0 20px', fontWeight: 900}}>Welcome to WasteWise!</h2>
-    <p style={{fontSize: '18px', fontWeight: 600, color: 'var(--text-gray)', maxWidth: '600px', margin: '0 auto 40px', lineHeight: 1.6}}>
-      Our goal is to stitch all the individual campus messes together into one massive, smart, unified eco-friendly ecosystem! 
-      By comparing, tracking, and assisting each location, we solve global problems right here at home.
-    </p>
+  <div className="content-grid fade-in">
+    <div className="card col-span-full" style={{textAlign: 'center', background: 'white', padding: '80px 40px'}}>
+      <div style={{fontSize: '100px', marginBottom: '24px'}}>👋🌍</div>
+      <h2 style={{fontSize: '40px', margin: '0 0 24px', fontWeight: 900, letterSpacing: '-0.02em'}}>Welcome to WasteWise!</h2>
+      <p style={{fontSize: '20px', fontWeight: 700, color: 'var(--text-gray)', maxWidth: '750px', margin: '0 auto 56px', lineHeight: 1.6}}>
+        Our goal is to stitch all the individual campus messes together into one massive, smart, unified eco-friendly ecosystem! 
+        By comparing, tracking, and assisting each location, we solve global problems right here at home.
+      </p>
 
-    <h3 style={{fontSize: '20px', fontWeight: 800, margin: '0 0 24px'}}>We help our campus achieve the UN Global Goals:</h3>
-    
-    <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', textAlign: 'left'}}>
-      <div style={{background: '#FEF3C7', padding: '24px', borderRadius: '24px'}}>
-        <div style={{fontSize: '32px', fontWeight: 900, color: '#D97706'}}>Goal 2</div>
-        <h4 style={{margin: '10px 0 5px', fontSize: '18px', fontWeight: 800}}>Zero Hunger</h4>
-        <p style={{margin: 0, fontWeight: 600, fontSize: '14px', color: '#B45309'}}>Making sure fresh extra food from any mess goes to people, not the trash.</p>
-      </div>
+      <h3 style={{fontSize: '24px', fontWeight: 900, margin: '0 0 32px'}}>We help our campus achieve the UN Global Goals:</h3>
+      
+      <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px', textAlign: 'left'}}>
+        <div style={{background: '#FEF3C7', padding: '32px', borderRadius: '32px'}}>
+          <div style={{fontSize: '40px', fontWeight: 900, color: '#D97706'}}>Goal 2</div>
+          <h4 style={{margin: '12px 0 8px', fontSize: '22px', fontWeight: 900}}>Zero Hunger</h4>
+          <p style={{margin: 0, fontWeight: 700, fontSize: '16px', color: '#B45309', lineHeight: 1.5}}>Making sure fresh extra food from any mess goes to people, not the trash.</p>
+        </div>
 
-      <div style={{background: '#FFEDD5', padding: '24px', borderRadius: '24px'}}>
-        <div style={{fontSize: '32px', fontWeight: 900, color: '#C2410C'}}>Goal 12</div>
-        <h4 style={{margin: '10px 0 5px', fontSize: '18px', fontWeight: 800}}>Responsible Choice</h4>
-        <p style={{margin: 0, fontWeight: 600, fontSize: '14px', color: '#9A3412'}}>Buying, cooking, and eating only what we really need locally.</p>
-      </div>
+        <div style={{background: '#FFEDD5', padding: '32px', borderRadius: '32px'}}>
+          <div style={{fontSize: '40px', fontWeight: 900, color: '#C2410C'}}>Goal 12</div>
+          <h4 style={{margin: '12px 0 8px', fontSize: '22px', fontWeight: 900}}>Responsible Choice</h4>
+          <p style={{margin: 0, fontWeight: 700, fontSize: '16px', color: '#9A3412', lineHeight: 1.5}}>Buying, cooking, and eating only what we really need locally.</p>
+        </div>
 
-      <div style={{background: '#D1FAE5', padding: '24px', borderRadius: '24px'}}>
-        <div style={{fontSize: '32px', fontWeight: 900, color: '#047857'}}>Goal 13</div>
-        <h4 style={{margin: '10px 0 5px', fontSize: '18px', fontWeight: 800}}>Climate Love</h4>
-        <p style={{margin: 0, fontWeight: 600, fontSize: '14px', color: '#065F46'}}>Less food in the trash dump means a cleaner, cooler Earth!</p>
+        <div style={{background: '#D1FAE5', padding: '32px', borderRadius: '32px'}}>
+          <div style={{fontSize: '40px', fontWeight: 900, color: '#047857'}}>Goal 13</div>
+          <h4 style={{margin: '12px 0 8px', fontSize: '22px', fontWeight: 900}}>Climate Love</h4>
+          <p style={{margin: 0, fontWeight: 700, fontSize: '16px', color: '#065F46', lineHeight: 1.5}}>Less food in the trash dump means a cleaner, cooler Earth!</p>
+        </div>
       </div>
     </div>
   </div>
@@ -600,49 +747,46 @@ export default function WasteWise() {
   return (
     <>
       <style>{STYLES}</style>
-      <div className="app-container">
+      <div className="app-shell">
         
-        <div className="header">
-          <div className="logo">🌱</div>
-          <h1 className="title">WasteWise</h1>
-          <p className="subtitle">Unifying all campus messes to turn perfectly green!</p>
-        </div>
+        {/* SIDEBAR / HEADER */}
+        <div className="app-sidebar">
+          
+          <div className="header-brand">
+            <div className="logo">🌱</div>
+            <h1 className="title">WasteWise</h1>
+            <p className="subtitle">Let's make our campus completely green!</p>
+          </div>
 
-        {/* CLOUD CONTEXT SWITCHER */}
-        <div className="context-picker-wrapper">
-          <label className="context-picker-lbl">Currently Viewing Data For</label>
-          <select 
-            className="context-picker"
-            value={activeMess}
-            onChange={(e) => setActiveMess(e.target.value)}
-          >
-            <option value="All Campus">🌍 Entire Campus (Overview)</option>
-            {messes.map(m => (
-              <option key={m} value={m}>🏢 {m}</option>
+          <div className="context-picker-wrapper">
+            <label className="context-picker-lbl">Currently Viewing Metrics For:</label>
+            <select className="context-picker" value={activeMess} onChange={(e) => setActiveMess(e.target.value)}>
+              <option value="All Campus">🌍 Entire Campus (Overview)</option>
+              {messes.map(m => (<option key={m} value={m}>🏢 {m}</option>))}
+            </select>
+          </div>
+
+          <div className="nav-tabs">
+            {tabs.map(tab => (
+              <button key={tab.id} className={"tab-btn " + (activeTab === tab.id ? "active" : "")} onClick={() => setActiveTab(tab.id)}>
+                <span className="tab-icon">{tab.icon}</span>
+                {tab.label}
+              </button>
             ))}
-          </select>
+          </div>
+
         </div>
 
-        <div className="nav-container">
-          {tabs.map(tab => (
-            <button 
-              key={tab.id}
-              className={"tab-btn " + (activeTab === tab.id ? "active" : "")}
-              onClick={() => setActiveTab(tab.id)}
-            >
-              <span className="tab-icon">{tab.icon}</span>
-              {tab.label}
-            </button>
-          ))}
-        </div>
-
-        <main style={{marginTop: '10px'}}>
-          {activeTab === 'dashboard' && <DashboardView logs={logs} activeMess={activeMess} messes={messes} />}
-          {activeTab === 'log' && <LogWasteView logs={logs} setLogs={setLogs} activeMess={activeMess} messes={messes} />}
-          {activeTab === 'ai' && <AiTipsView activeMess={activeMess} messes={messes} logs={logs} />}
-          {activeTab === 'practices' && <LearnView />}
-          {activeTab === 'survey' && <SurveyView />}
-          {activeTab === 'objective' && <ObjectiveView />}
+        {/* MAIN DISPLAY */}
+        <main className="app-main">
+          <div className="page-container">
+            {activeTab === 'dashboard' && <DashboardView logs={logs} activeMess={activeMess} messes={messes} />}
+            {activeTab === 'log' && <LogWasteView logs={logs} setLogs={setLogs} activeMess={activeMess} messes={messes} />}
+            {activeTab === 'ai' && <AiTipsView activeMess={activeMess} />}
+            {activeTab === 'practices' && <LearnView />}
+            {activeTab === 'survey' && <SurveyView />}
+            {activeTab === 'objective' && <ObjectiveView />}
+          </div>
         </main>
         
       </div>
